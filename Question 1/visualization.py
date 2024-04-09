@@ -13,9 +13,10 @@ class Visualization:
 
         self.ax.imshow(grid, cmap='binary')
 
-    def plot_path(self, path):
-        for pos in path:
-            self.ax.plot(pos[0], pos[1], marker='o', color='blue')
+    def plot_path(self, path, color='blue'):  # Updated to accept a color argument
+        if path is not None:
+            for pos in path:
+                self.ax.plot(pos[0], pos[1], marker='o', color=color)
 
     def plot_robot(self, position):
         self.ax.plot(position[0], position[1], marker='s', color='red')
