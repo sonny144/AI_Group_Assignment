@@ -1,3 +1,5 @@
+import math
+
 class Environment:
     def __init__(self, width, height):
         self.width = width
@@ -12,14 +14,10 @@ class Environment:
 
     def get_possible_actions(self, x, y):
         actions = []
-        if x > 0 and not self.is_obstacle(x - 1, y):
-            actions.append((-1, 0))  # Move left
-        if x < self.width - 1 and not self.is_obstacle(x + 1, y):
-            actions.append((1, 0))   # Move right
-        if y > 0 and not self.is_obstacle(x, y - 1):
-            actions.append((0, -1))  # Move up
-        if y < self.height - 1 and not self.is_obstacle(x, y + 1):
-            actions.append((0, 1))   # Move down
+        for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            new_x, new_y = x + dx, y + dy
+            if 0 <= new_x < self.width and 0 <= new_y < self.height and not self.is_obstacle(new_x, new_y):
+                actions.append((dx, dy))
         return actions
 
     def cost_function(self, action):
@@ -27,8 +25,13 @@ class Environment:
         return 1
 
     def heuristic_function(self, current_pos, target_pos):
-        # Simple Manhattan distance heuristic
-        return abs(current_pos[0] - target_pos[0]) + abs(current_pos[1] - target_pos[1])
+        # Calculate Euclidean distance considering obstacles
+        min_distance = float('inf')
+        for obstacle in self.obstacles:
+            obstacle_distance = math.sqrt((current_pos[0] - obstacle[0])**2 + (current_pos[1] - obstacle[1])**2)
+            min_distance = min(min_distance, obstacle_distance)
+        remaining_distance = math.sqrt((current_pos[0] - target_pos[0])**2 + (current_pos[1] - target_pos[1])**2)
+        return remaining_distance + min_distance
 
     def astar_search(self, start_pos, target_pos):
         open_list = [(start_pos, 0, self.heuristic_function(start_pos, target_pos), [])]
@@ -55,3 +58,4 @@ class Environment:
                     open_list.append((next_pos, new_g, new_h, new_path))
 
         return None  # No path found
+
