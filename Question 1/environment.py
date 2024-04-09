@@ -34,16 +34,16 @@ class Environment:
         return remaining_distance + min_distance
 
     def astar_search(self, start_pos, target_pos):
-        open_list = [(start_pos, 0, self.heuristic_function(start_pos, target_pos), [])]
+        open_list = [(start_pos, 0, self.heuristic_function(start_pos, target_pos), [], 0)]  # Include cost in the tuple
         closed_list = set()
 
         while open_list:
-            current_pos, g, h, path = min(open_list, key=lambda x: x[1] + x[2])
-            open_list.remove((current_pos, g, h, path))
+            current_pos, g, h, path, total_cost = min(open_list, key=lambda x: x[1] + x[2])
+            open_list.remove((current_pos, g, h, path, total_cost))
             closed_list.add(current_pos)
 
             if current_pos == target_pos:
-                return path + [current_pos]
+                return path + [current_pos], total_cost  # Return the path and total cost when the target is reached
 
             for action in self.get_possible_actions(*current_pos):
                 next_pos = (current_pos[0] + action[0], current_pos[1] + action[1])
@@ -53,9 +53,9 @@ class Environment:
                 new_g = g + self.cost_function(action)
                 new_h = self.heuristic_function(next_pos, target_pos)
                 new_path = path + [current_pos]
+                new_total_cost = total_cost + self.cost_function(action)  # Update total cost
 
-                if (next_pos, g, h, path) not in open_list or new_g + new_h < h:
-                    open_list.append((next_pos, new_g, new_h, new_path))
+                if (next_pos, g, h, path, total_cost) not in open_list or new_g + new_h < h:
+                    open_list.append((next_pos, new_g, new_h, new_path, new_total_cost))
 
-        return None  # No path found
-
+        return None, None  # No path found
