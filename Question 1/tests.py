@@ -8,7 +8,7 @@ env.add_obstacle(20,1)# Add obstacle
 
 # Define the starting and target positions
 start_pos = (0, 0)
-target_pos = (28, 2)
+target_pos = (27, 2)
 
 # Perform A* search to find the optimal path
 path = env.astar_search(start_pos, target_pos)
