@@ -25,7 +25,7 @@ class Environment:
         return 1
 
     def heuristic_function(self, current_pos, target_pos):
-        # Calculate Euclidean distance considering obstacles
+       
         min_distance = float('inf')
         for obstacle in self.obstacles:
             obstacle_distance = math.sqrt((current_pos[0] - obstacle[0])**2 + (current_pos[1] - obstacle[1])**2)
@@ -53,7 +53,7 @@ class Environment:
                 new_g = g + self.cost_function(action)
                 new_h = self.heuristic_function(next_pos, target_pos)
                 new_path = path + [current_pos]
-                new_total_cost = total_cost + self.cost_function(action)  # Update total cost
+                new_total_cost = total_cost + self.cost_function(action)  
 
                 if (next_pos, g, h, path, total_cost) not in open_list or new_g + new_h < h:
                     open_list.append((next_pos, new_g, new_h, new_path, new_total_cost))
