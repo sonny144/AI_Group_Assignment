@@ -1,11 +1,12 @@
 from environment import Environment
 from visualization import Visualization
 
+
 def test_simple_environment():
     # Test case 1: Simple Environment
     env1 = Environment(6, 6)
     env1.add_obstacle(2, 2)
-    start_pos1 = (0, 0)
+    start_pos1 = (1, 1)
     charging_station_pos1 = (5, 5)
 
     path_manhattan1, cost_manhattan1 = env1.astar_search(start_pos1, charging_station_pos1)
